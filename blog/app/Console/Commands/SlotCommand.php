@@ -3,6 +3,9 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
+use App\Models\Bet;
+use App\Models\Board;
+
 class SlotCommand extends Command {
 
     /**
@@ -28,8 +31,12 @@ class SlotCommand extends Command {
     {
         $this->info("Executing Slot machine...");
 
-
-
+        $boardConfig = ['rows' => 3, 'cols' => 5];
+        $game = new Board($boardConfig);
+        $payline = [];// new Payline();
+        $game->play($payline);
+        $boardStr = $game->print();
+        $this->info("Print Board: \n" . $boardStr);
 
         $this->info("Finished Slot Machine.");
     }
