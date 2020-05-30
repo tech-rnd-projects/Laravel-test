@@ -1,0 +1,8 @@
+
+1. issue in payout:
+A payline might have multiple matches from different rows, this case is not catered for.
+for now just take the biggest match.
+
+2. No max paylines:
+a bet might have x amount of paylines, but its always 1 euro. the more paylines, the more winnings :) lol.
+for now just hardcoded bet paylines (always the same bet).

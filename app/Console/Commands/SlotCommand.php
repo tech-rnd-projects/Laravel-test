@@ -33,12 +33,26 @@ class SlotCommand extends Command {
 
         $boardConfig = ['rows' => 3, 'cols' => 5];
         $game = new Board($boardConfig);
-        $payline = [];// new Payline();
-        $game->play($payline);
+        $payline = [
+            "0 3 6 9 12",
+            "1 4 7 10 13",
+            "2 5 8 11 14",
+            "0 4 8 10 12",
+            "2 4 6 10 14",
+        ];
+        $bet = new Bet(1, $payline);
+        $betResult = $game->placeBet($bet);
+        $payout = $betResult->getDetailWinnings();
+        $result = json_encode($payout);
+        $this->info("payout: " . $result . '\n');
         $boardStr = $game->print();
         $this->info("Print Board: \n" . $boardStr);
 
         $this->info("Finished Slot Machine.");
+    }
+
+    function payout($winnings) {
+
     }
 
     /**
