@@ -5,5 +5,5 @@ namespace App\Interfaces;
 interface IBet
 {
   public function getAmount() : int;
-  public function getPaylines() : string;
+  public function getPaylines() : array;
 }

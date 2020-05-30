@@ -9,6 +9,7 @@ use App\Models\BetResult;
 use App\Models\RowResult;
 use App\Models\Symbol;
 use App\Common\Helpers\SymbolHelper;
+use Illuminate\Support\Facades\Log;
 
 class Board
 {
@@ -44,7 +45,8 @@ class Board
     $paylines = $bet->getPaylines();
     for ($i = 0; $i < count($paylines); $i++) {
       $payline = $paylines[$i];
-      $rowMatches = paylineRowResults($payline);
+      $rowMatches = $this->paylineRowResults($payline);
+      Log::info("[placeBet] payline:". json_encode($payline) ." \n rowMatches:". json_encode($rowMatches) ."\n");
       $paylineResult = new PaylineResult($payline, $rowMatches);
       array_push($paylinesMatches, $paylineResult);
     }
@@ -92,7 +94,7 @@ class Board
       $previouseCellIndex = -1;
       for ($colIndex = 0; $colIndex < $this->cols; $colIndex++) {
         $cell = $row[$colIndex];
-        $cellSymbol = $cell.getSlug();
+        $cellSymbol = $cell->getSlug();
 
         for ($s = 0; $s < $sum; $s++) {
           $symbol = $symbols[$s];
@@ -127,6 +129,7 @@ class Board
         $value = $rowIndex + ($colIndex * $this->rows);
         $cell = new Symbol($cellIndex, $slug, $value);
 
+        Log::info("[buildBoard] :". $cellIndex . ", " . $slug . ", " . $value ."\n");
         $row[$colIndex] = $cell;
         $cellIndex++;
       }

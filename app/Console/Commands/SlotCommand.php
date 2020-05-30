@@ -1,6 +1,7 @@
 <?php namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Console\Input\InputOption;
 
 use App\Models\Bet;
@@ -29,8 +30,8 @@ class SlotCommand extends Command {
      */
     public function handle()
     {
+        Log::info("[slotCommand] entry");
         $this->info("Executing Slot machine...");
-
         $boardConfig = ['rows' => 3, 'cols' => 5];
         $game = new Board($boardConfig);
         $payline = [
@@ -44,7 +45,7 @@ class SlotCommand extends Command {
         $betResult = $game->placeBet($bet);
         $payout = $betResult->getDetailWinnings();
         $result = json_encode($payout);
-        $this->info("payout: " . $result . '\n');
+        $this->info("payout: " . $result . "\n\n");
         $boardStr = $game->print();
         $this->info("Print Board: \n" . $boardStr);
 

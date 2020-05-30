@@ -11,7 +11,7 @@ class PaylineResult implements IPaylineResult
   protected $payline;
   protected $rowMatches; // all the rows results for the given payline, even empty results.
 
-  public function __construct(array $payline, array $rowMatches)
+  public function __construct(string $payline, array $rowMatches)
   {
     $this->payline = $payline;
     $this->rowMatches = $rowMatches;
@@ -35,7 +35,7 @@ class PaylineResult implements IPaylineResult
     return $maxMatch;
   }
 
-  public function getPayline() : array {
+  public function getPayline() : string {
     return $this->payline;
   }
 

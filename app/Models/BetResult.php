@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use \DateTime;
+use Illuminate\Support\Facades\Log;
 use App\Interfaces\IBetResult;
 
 class BetResult implements IBetResult
@@ -24,7 +25,7 @@ class BetResult implements IBetResult
     $betAmount = 100;
     $totalWin = 0;
     for ($i = 0; $i < count($this->paylinesMatches); $i++) {
-      $paylineResult = $paylinesMatches[$i];
+      $paylineResult = $this->paylinesMatches[$i];
       $payline = $paylineResult->getPayline();
       $rowMatch = $paylineResult->getMaxRowMatch();
       $foundSymbols = $rowMatch->getFoundSymbols();
@@ -33,8 +34,10 @@ class BetResult implements IBetResult
         // if no match dont print the payline.
         array_push($matchPaylines, $payline);
         // now cal winnings
-        $totalWin += calculateWinnings($betAmount, $foundSymbols);
+        $totalWin += $this->calculateWinnings($betAmount, $foundSymbols);
       }
+      
+      Log::info("[slotCommand] getDetailWinnings=". json_encode($payline) ."\n");
     }
 
     $result = [
@@ -47,7 +50,7 @@ class BetResult implements IBetResult
     return $result;
   }
 
-  private function calculateWinnings($betAmount, $foundSymbols) : integer {
+  private function calculateWinnings($betAmount, $foundSymbols) : int {
     $percentage = 0;
     if ($foundSymbols >= 5) {
       $percentage = 1000;
@@ -57,7 +60,7 @@ class BetResult implements IBetResult
       $percentage = 20;
     }
 
-    return $betAmount / $percentage;
+    return (int)($betAmount / $percentage);
   }
 
 }

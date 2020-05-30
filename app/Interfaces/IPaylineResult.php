@@ -8,6 +8,6 @@ use App\Interfaces\IRowResult;
 interface IPaylineResult
 {
   public function getMaxRowMatch() : IRowResult;
-  public function getPayline() : array;
+  public function getPayline() : string;
   public function getRowMatches() : array;
 }
