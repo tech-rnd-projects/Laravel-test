@@ -21,7 +21,7 @@ class SymbolHelper {
   
   public static function random() : string {
     $symbols = SymbolHelper::getSymbols();
-    $countSymbols = count($symbols);
+    $countSymbols = count($symbols) - 1;
     $index = rand(0, $countSymbols);
     $value = $symbols[$index];
 

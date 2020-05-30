@@ -25,23 +25,10 @@ class Board
     $this->generateBoard();
   }
 
-  public function generateBoard() : void {
-    $board = [];
+  public function generateBoard() : array {
+    $this->buildBoard();
 
-    for ($rowIndex = 0; $rowIndex < $this->rows; $rowIndex++) {
-      $row = [];
-      for ($colIndex = 0; $colIndex < $this->cols; $colIndex++) {
-        $slug = SymbolHelper::random();
-        $value = '1';
-        $cell = new Symbol($slug, $value);
-
-        $row[$colIndex] = $cell;
-      }
-
-      $board[$rowIndex] = $row;
-    }
-
-    $this->board = $board;
+    return $this->board;
   }
 
   public function play($payline) : void {
@@ -59,11 +46,35 @@ class Board
         $cell = $row[$colIndex];
         $value = $cell->getValue();
         $slug = $cell->getSlug();
-        $output .= "\t[slug:".$slug." val:".$value."]";
+        $id = $cell->getId();
+        $output .= "\t[id:" . $id . " s:".$slug." val:".$value."]";
       }
       $output .= "\n\r";
     }
 
     return $output;
   }
+
+  private function buildBoard() {
+    $board = [];
+
+    // build as row by column
+    $cellIndex = 0;
+    for ($rowIndex = 0; $rowIndex < $this->rows; $rowIndex++) {
+      $row = [];
+      for ($colIndex = 0; $colIndex < $this->cols; $colIndex++) {
+        $slug = SymbolHelper::random();
+        $value = $rowIndex + ($colIndex * $this->rows);
+        $cell = new Symbol($cellIndex, $slug, $value);
+
+        $row[$colIndex] = $cell;
+        $cellIndex++;
+      }
+
+      $board[$rowIndex] = $row;
+    }
+
+    $this->board = $board;
+  }
+
 }
