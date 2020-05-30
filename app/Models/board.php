@@ -5,6 +5,7 @@ namespace App\Models;
 use \DateTime;
 use App\Models\Bet;
 use App\Models\Symbol;
+use App\Common\Helpers\SymbolHelper;
 
 class Board
 {
@@ -30,7 +31,7 @@ class Board
     for ($rowIndex = 0; $rowIndex < $this->rows; $rowIndex++) {
       $row = [];
       for ($colIndex = 0; $colIndex < $this->cols; $colIndex++) {
-        $slug = 'T';
+        $slug = SymbolHelper::random();
         $value = '1';
         $cell = new Symbol($slug, $value);
 
