@@ -37,11 +37,15 @@ class SlotCommand extends Command {
         $boardConfig = ['rows' => 3, 'cols' => 5, 'boardValues' => $testBoard];
         $game = new Board($boardConfig);
         $paylines = [
+            "8 5 8 11 10", // <-- bug, notice the duplicate '8', should match '5 8 11' but first 8 was skipped
+            "9 5 8 11 10",
             "0 3 6 9 12",
             "1 4 7 10 13",
             "2 5 8 11 14",
             "0 4 8 10 12",
             "2 4 6 10 14",
+            "0 5 8 11 14",
+            "2 5 8 2 2",
         ];
         $bet = new Bet(1, $paylines);
         $betResult = $game->placeBet($bet);
