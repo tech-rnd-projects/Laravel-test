@@ -4,16 +4,19 @@ namespace App\Models;
 
 use \DateTime;
 use Illuminate\Support\Facades\Log;
+use App\Interfaces\IBet;
 use App\Interfaces\IBetResult;
 
 class BetResult implements IBetResult
 {
   // $paylinesMatches is an array of paylineResult which has shape of [RowResult, payline]
   protected $paylinesMatches;
+  protected $bet;
 
-  public function __construct(array $paylinesMatches)
+  public function __construct(IBet $bet, array $paylinesMatches)
   {
     $this->paylinesMatches = $paylinesMatches;
+    $this->bet = $bet;
   }
 
   /**
@@ -22,7 +25,7 @@ class BetResult implements IBetResult
   public function getDetailWinnings() : array {
     // paylines that had more then 3 symbols match. plus get the max row match.
     $matchPaylines = [];
-    $betAmount = 100;
+    $betAmount = $this->bet->getAmount();
     $totalWin = 0;
     for ($i = 0; $i < count($this->paylinesMatches); $i++) {
       $paylineResult = $this->paylinesMatches[$i];
