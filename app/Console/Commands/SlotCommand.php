@@ -45,11 +45,19 @@ class SlotCommand extends Command {
             "0 5 8 11 14",
             "2 5 8 2 2",
         ];
-        $bet = new Bet(100, $paylines);
+        $betAmount = 100;
+        $bet = new Bet($betAmount, $paylines);
         $betResult = $game->placeBet($bet);
         $payout = $betResult->getDetailWinnings();
-        $result = json_encode($payout, JSON_PRETTY_PRINT);
-        $this->info($result . "\n");
+        $boardValues = $game->values();
+        $arrayP = $payout['paylines'];
+        $result = "{\n".
+            "\tboard: [" . implode(', ', $boardValues) . "],\n".
+            "\tpaylines: " . json_encode($arrayP, JSON_UNESCAPED_SLASHES) . ",\n".
+            "\tbet_amount: " . $betAmount . ",\n".
+            "\ttotal_win: " . $payout['total_win'] . "\n".
+        "}\n";
+        $this->info($result);
         $boardStr = $game->print();
         $this->info("Print Board: \n" . $boardStr);
 

@@ -46,16 +46,13 @@ class BetResult implements IBetResult
         // now cal winnings
         $paylineWin = $this->calculateWinnings($betAmount, $countSymbols);
         $totalWin += $paylineWin;
-        Log::info("[getDetailWinnings] win:" . $paylineWin);
-        Log::info("[getDetailWinnings]". json_encode($payline) ." symbols:" . implode(", ", $symbolsFound));
+        Log::debug("[getDetailWinnings] win:" . $paylineWin);
+        Log::debug("[getDetailWinnings]". json_encode($payline) ." symbols:" . implode(", ", $symbolsFound));
       }
     }
 
-    $boardValues = $this->board->values();
     $result = [
-      'board' => $boardValues,
       'paylines' => $matchPaylines,
-      'bet_amount' => $betAmount,
       'total_win' => $totalWin,
     ];
     // ToDo -loop in every payline result to remove empty once and calculate biggest match winning
