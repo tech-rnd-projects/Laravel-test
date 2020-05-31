@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\ServeCommand::class,
         Commands\SlotCommand::class,
+        Commands\SlotStaticCommand::class,
     ];
 
     /**

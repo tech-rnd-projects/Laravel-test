@@ -39,7 +39,7 @@ class Board implements IBoard
    * @return IBetResult result of each payline.
    */
   public function placeBet(IBet $bet) : IBetResult {
-    Log::info("[placeBet] \n");
+    Log::debug("[placeBet] \n");
     $payOut = 0;
     $paylinesMatches = []; // results of each payline against every row.
     $paylines = $bet->getPaylines();
@@ -83,8 +83,8 @@ class Board implements IBoard
    * @return array all paylines results and any matched 'row' from the board, and the 'sequence' matching from payline with the row.
   */
   private function paylineRowResults(string $payline, int $minMatch = 3) : array {
-    Log::info("\n");
-    Log::info("[paylineRowResults] payline:". $payline);
+    Log::debug("\n");
+    Log::debug("[paylineRowResults] payline:". $payline);
     $paylineValues = explode(' ', $payline);
     $paylineSum = count($paylineValues);
     $rowMatches = []; // track every row matches against the payline. 1 payline has many row match
@@ -111,7 +111,7 @@ class Board implements IBoard
       }
       $pValue = $paylineValues[$pIndex]; // payline value to check match against cell value
       // to make sure that row Index and Column Index are keeping track of pointer position for matched cases.
-      Log::info("p:" . $pIndex . " r:" . $rowIndex . " c:" . $colIndex);
+      Log::debug("p:" . $pIndex . " r:" . $rowIndex . " c:" . $colIndex);
       // avoid out of bounds rows
       if ($rowIndex < $this->rows) {
         // check board row by column
@@ -121,7 +121,7 @@ class Board implements IBoard
           $row = $board[$rowIndex];
           // debug
           $toRPrint = array_map(function ($rr) { return $rr->getValue();}, $row);
-          Log::info("[start] row:" . $rowIndex . " val:[" . implode(" ", $toRPrint) . "] col:" . $colIndex);
+          Log::debug("[start] row:" . $rowIndex . " val:[" . implode(" ", $toRPrint) . "] col:" . $colIndex);
           if ($colIndex < $this->cols) {
             for ($colIndex; $colIndex < $this->cols; $colIndex++) {
               $cell = $row[$colIndex];
@@ -130,7 +130,7 @@ class Board implements IBoard
 
               // found match
               if ($pValue == $cellVal) {
-                Log::info("[found] " . $pValue . "= cellSymbol: " . $cellSymbol);
+                Log::debug("[found] " . $pValue . "= cellSymbol: " . $cellSymbol);
                 $foundMatch = true;
               }
               if ($foundMatch) {
@@ -141,14 +141,14 @@ class Board implements IBoard
                 $colIndex++;
                 // debug found consecutive symbols so far
                 $toPrint = array_map(function ($c) { return $c->getSlug();}, $foundSymbols);
-                Log::info("consecutive-matches: found symbols[" . implode(", ", $toPrint) . "]");
+                Log::debug("consecutive-matches: found symbols[" . implode(", ", $toPrint) . "]");
                 break; // go to next symbol in payline, and keep pointers in board
               } else {
                 $previouseCollIndex = -1;
                 $previouseRowIndex = -1;
                 // if found < 3 then reset foundSymbols to empty.
                 if (count($foundSymbols) < $minMatch) {
-                  Log::info("[clear] cellVal: " . $cellVal);
+                  Log::debug("[clear] cellVal: " . $cellVal);
                   // clear, dont bother if its less then minMatch
                   $foundSymbols = [];
                 }
@@ -158,7 +158,7 @@ class Board implements IBoard
           }
           // stay on same raw if colIndex is not last cell in row
           if ($foundMatch && $colIndex < $this->cols) {
-            Log::info("break: rows col:" . $colIndex);
+            Log::debug("break: rows col:" . $colIndex);
             break; // go to next symbol in payline, and keep pointers in board
           }
           // end of row always store result of any match
@@ -167,7 +167,7 @@ class Board implements IBoard
           $rowResult = new RowResult($foundSymbols, $row);
           array_push($rowMatches, $rowResult);
           $colIndex = 0; // start next row and first column
-          Log::info("[end] row: " . $rowIndex . " count:" . count($rowMatches));
+          Log::debug("[end] row: " . $rowIndex . " count:" . count($rowMatches));
         } // end row search
       }
     }
@@ -191,7 +191,7 @@ class Board implements IBoard
           $value = $rowIndex + ($colIndex * $this->rows);
           $cell = new Symbol($cellIndex, $slug, $value);
 
-          // Log::info("[buildBoard] :". $cellIndex . ", " . $slug . ", " . $value ."\n");
+          // Log::debug("[buildBoard] :". $cellIndex . ", " . $slug . ", " . $value ."\n");
           $row[$colIndex] = $cell;
           $cellIndex++;
         }
@@ -215,7 +215,7 @@ class Board implements IBoard
         $value = $rowIndex + ($colIndex * $this->rows);
         $cell = new Symbol($cellIndex, $slug, $value);
 
-        // Log::info("[buildBoard] :". $cellIndex . ", " . $slug . ", " . $value ."\n");
+        // Log::debug("[buildBoard] :". $cellIndex . ", " . $slug . ", " . $value ."\n");
         $row[$colIndex] = $cell;
         $cellIndex++;
       }

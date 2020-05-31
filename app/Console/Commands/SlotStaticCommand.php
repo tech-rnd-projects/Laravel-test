@@ -7,14 +7,14 @@ use Symfony\Component\Console\Input\InputOption;
 use App\Models\Bet;
 use App\Models\Board;
 
-class SlotCommand extends Command {
+class SlotStaticCommand extends Command {
 
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'slot';
+    protected $name = 'slot-static';
 
     /**
      * The console command description.
@@ -32,7 +32,8 @@ class SlotCommand extends Command {
     {
         Log::info("[slotCommand] entry");
         $this->info("Executing Slot machine...\n");
-        $boardConfig = ['rows' => 3, 'cols' => 5];
+        $testBoard = "J J J Q K cat J Q monkey bird bird bird J Q A";
+        $boardConfig = ['rows' => 3, 'cols' => 5, 'boardValues' => $testBoard];
         $game = new Board($boardConfig);
         $paylines = [
             "8 5 8 11 10", // <-- bug, notice the duplicate '8', should match '5 8 11' but first 8 was skipped
