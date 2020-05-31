@@ -9,5 +9,5 @@ interface IBoard
 {
   public function placeBet(IBet $bet) : IBetResult;
   public function print() : string;
-  public function printValues() : string;
+  public function values() : array;
 }

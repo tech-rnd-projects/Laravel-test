@@ -27,7 +27,7 @@ class BetResult implements IBetResult
    */
   public function getDetailWinnings() : array {
     // paylines that had more then 3 symbols match. plus get the max row match.
-    $matchPaylines = [];
+    $matchPaylines = []; // [{'payline as text' : foundSymbols}],
     $betAmount = $this->bet->getAmount();
     $totalWin = 0;
     for ($i = 0; $i < count($this->paylinesMatches); $i++) {
@@ -35,21 +35,26 @@ class BetResult implements IBetResult
       $payline = $paylineResult->getPayline();
       $rowMatch = $paylineResult->getMaxRowMatch();
       $foundSymbols = $rowMatch->getFoundSymbols();
-      if ($foundSymbols > 3) {
+      $symbolsFound = array_map(function ($c) { return $c->getSlug();}, $foundSymbols);
+      $countSymbols = count($symbolsFound);
+      if ($countSymbols >= 3) {
         // print the paylines that had the maximun matches,
         // if no match dont print the payline.
-        array_push($matchPaylines, $payline);
+        $nPaylines = null;
+        $nPaylines[$payline] = $countSymbols;
+        array_push($matchPaylines, $nPaylines);
         // now cal winnings
-        $totalWin += $this->calculateWinnings($betAmount, $foundSymbols);
+        $paylineWin = $this->calculateWinnings($betAmount, $countSymbols);
+        $totalWin += $paylineWin;
+        Log::info("[getDetailWinnings] win:" . $paylineWin);
+        Log::info("[getDetailWinnings]". json_encode($payline) ." symbols:" . implode(", ", $symbolsFound));
       }
-      
-      Log::info("[slotCommand] getDetailWinnings=". json_encode($payline) ."\n");
     }
 
-    $boardValues = $this->board->printValues();
+    $boardValues = $this->board->values();
     $result = [
-      'board' => "[" . $boardValues . "]",
-      'paylines' => implode(',', $matchPaylines),
+      'board' => $boardValues,
+      'paylines' => $matchPaylines,
       'bet_amount' => $betAmount,
       'total_win' => $totalWin,
     ];
@@ -57,7 +62,7 @@ class BetResult implements IBetResult
     return $result;
   }
 
-  private function calculateWinnings($betAmount, $foundSymbols) : int {
+  private function calculateWinnings(int $betAmount, int $foundSymbols) : int {
     $percentage = 0;
     if ($foundSymbols >= 5) {
       $percentage = 1000;
@@ -67,7 +72,7 @@ class BetResult implements IBetResult
       $percentage = 20;
     }
 
-    return (int)($betAmount / $percentage);
+    return (int)(($percentage / 100) * $betAmount);
   }
 
 }

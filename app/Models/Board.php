@@ -55,7 +55,7 @@ class Board implements IBoard
     return $result;
   }
 
-  public function printValues() : string {
+  public function values() : array {
     $values = [];
     $board = $this->board;
     for ($rowIndex = 0; $rowIndex < $this->rows; $rowIndex++) {
@@ -67,7 +67,7 @@ class Board implements IBoard
       }
     }
 
-    return implode(', ', $values);
+    return $values;
   }
 
   public function print() : string {

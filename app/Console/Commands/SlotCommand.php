@@ -21,7 +21,7 @@ class SlotCommand extends Command {
      *
      * @var string
      */
-    protected $description = "Start Slot Machine";
+    protected $description = "Start Slot Machine with random board values";
 
     /**
      * Execute the console command.
@@ -45,11 +45,11 @@ class SlotCommand extends Command {
             "0 5 8 11 14",
             "2 5 8 2 2",
         ];
-        $bet = new Bet(1, $paylines);
+        $bet = new Bet(100, $paylines);
         $betResult = $game->placeBet($bet);
         $payout = $betResult->getDetailWinnings();
-        $result = json_encode($payout);
-        $this->info("payout: " . $result . "\n\n");
+        $result = json_encode($payout, JSON_PRETTY_PRINT);
+        $this->info($result . "\n");
         $boardStr = $game->print();
         $this->info("Print Board: \n" . $boardStr);
 
