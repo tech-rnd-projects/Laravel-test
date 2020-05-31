@@ -4,6 +4,7 @@ namespace App\Models;
 
 use \DateTime;
 use Illuminate\Support\Facades\Log;
+use App\Interfaces\IBoard;
 use App\Interfaces\IBet;
 use App\Interfaces\IBetResult;
 
@@ -11,12 +12,14 @@ class BetResult implements IBetResult
 {
   // $paylinesMatches is an array of paylineResult which has shape of [RowResult, payline]
   protected $paylinesMatches;
+  protected $board;
   protected $bet;
 
-  public function __construct(IBet $bet, array $paylinesMatches)
+  public function __construct(IBet $bet, IBoard $board, array $paylinesMatches)
   {
     $this->paylinesMatches = $paylinesMatches;
     $this->bet = $bet;
+    $this->board = $board;
   }
 
   /**
@@ -43,8 +46,9 @@ class BetResult implements IBetResult
       Log::info("[slotCommand] getDetailWinnings=". json_encode($payline) ."\n");
     }
 
+    $boardValues = $this->board->printValues();
     $result = [
-      'board' => '[J, J, J, Q, K, cat, J, Q, monkey, bird, bird, bird, J, Q, A]',
+      'board' => "[" . $boardValues . "]",
       'paylines' => implode(',', $matchPaylines),
       'bet_amount' => $betAmount,
       'total_win' => $totalWin,
