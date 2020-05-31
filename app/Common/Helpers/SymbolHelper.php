@@ -18,12 +18,27 @@ class SymbolHelper {
     return $symbolMapping;
   }
 
-  
   public static function random() : string {
     $symbols = SymbolHelper::getSymbols();
     $countSymbols = count($symbols) - 1;
     $index = rand(0, $countSymbols);
     $value = $symbols[$index];
+
+    return $value;
+  }
+
+  public static function findSymbol(string $text): string {
+    $symbols = SymbolHelper::getSymbols();
+    $countSymbols = count($symbols);
+    $value = '';
+    $keys = array_keys($symbols);
+    for ($i = 0; $i < $countSymbols; $i++) {
+      $symbolVal = $symbols[$keys[$i]];
+      if ($symbolVal == $text) {
+        $value = $symbolVal;
+        break;
+      }
+    }
 
     return $value;
   }

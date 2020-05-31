@@ -3,21 +3,24 @@
 namespace App\Models;
 
 use \DateTime;
+use App\Interfaces\IBet;
 
-class Bet
+class Bet implements IBet
 {
   protected $amount;
+  protected $paylines;
 
-  public function __construct(array $config = [])
+  public function __construct(int $amount, array $paylines)
   {
-    if (isset($config['amount'])) {
-      $this->amount = $config['amount'];
-    } else {
-      $this->amount = 1;
-    }
+    $this->amount = $amount;
+    $this->paylines = $paylines;
   }
 
-  public function getMultiplier() {
+  public function getAmount() : int {
     return $this->amount;
+  }
+
+  public function getPaylines() : array {
+    return $this->paylines;
   }
 }
