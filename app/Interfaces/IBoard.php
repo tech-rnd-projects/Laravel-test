@@ -8,4 +8,6 @@ use App\Interfaces\IBetResult;
 interface IBoard
 {
   public function placeBet(IBet $bet) : IBetResult;
+  public function print() : string;
+  public function values() : array;
 }

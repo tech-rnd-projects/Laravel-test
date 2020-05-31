@@ -1,13 +1,10 @@
-0 static board vs random
-in slot Command uncomment
-
 1. issue in payout:
 A payline might have multiple matches from different rows, this case is not catered for.
 for now just take the biggest match.
 
 2. booard row - payline matches:
 if the board row has 'r 1 r k h' and the payline is 'r k h 1 2', 'r' first match is column 1 so its a logical bug.
-improvement: second 'r' in row should also be considered. 
+improvement: second 'r' in row should also be considered. to fix, when cell is not matched, move backwards the number of symbols matchesd + 1. 
 Note this is on a single row not like poiint 1 whuich is multiple matches in multiple rows.
 
 3. No max paylines:

@@ -50,9 +50,24 @@ class Board implements IBoard
       array_push($paylinesMatches, $paylineResult);
     }
 
-    $result = new BetResult($bet, $paylinesMatches);
+    $result = new BetResult($bet, $this, $paylinesMatches);
 
     return $result;
+  }
+
+  public function values() : array {
+    $values = [];
+    $board = $this->board;
+    for ($rowIndex = 0; $rowIndex < $this->rows; $rowIndex++) {
+      $row = $board[$rowIndex];
+      for ($colIndex = 0; $colIndex < $this->cols; $colIndex++) {
+        $cell = $row[$colIndex];
+        $slug = $cell->getSlug();
+        array_push($values, $slug);
+      }
+    }
+
+    return $values;
   }
 
   public function print() : string {

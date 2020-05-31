@@ -21,7 +21,7 @@ class SlotStaticCommand extends Command {
      *
      * @var string
      */
-    protected $description = "Start Slot Machine";
+    protected $description = "Start Slot Machine with static board values";
 
     /**
      * Execute the console command.
@@ -39,18 +39,26 @@ class SlotStaticCommand extends Command {
             "8 5 8 11 10", // <-- bug, notice the duplicate '8', should match '5 8 11' but first 8 was skipped
             "9 5 8 11 10",
             "0 3 6 9 12",
-            "1 4 7 10 13",
-            "2 5 8 11 14",
-            "0 4 8 10 12",
-            "2 4 6 10 14",
-            "0 5 8 11 14",
             "2 5 8 2 2",
+            "1 4 7 10 13", // samples
+            "2 5 8 11 14", // samples
+            "0 4 8 10 12", // samples
+            "2 4 6 10 14", // samples
+            "0 5 8 11 14", // samples
         ];
-        $bet = new Bet(1, $paylines);
+        $betAmount = 100;
+        $bet = new Bet($betAmount, $paylines);
         $betResult = $game->placeBet($bet);
         $payout = $betResult->getDetailWinnings();
-        $result = json_encode($payout);
-        $this->info("payout: " . $result . "\n\n");
+        $boardValues = $game->values();
+        $arrayP = $payout['paylines'];
+        $result = "{\n".
+            "\tboard: [" . implode(', ', $boardValues) . "],\n".
+            "\tpaylines: " . json_encode($arrayP, JSON_UNESCAPED_SLASHES) . ",\n".
+            "\tbet_amount: " . $betAmount . ",\n".
+            "\ttotal_win: " . $payout['total_win'] . "\n".
+        "}\n";
+        $this->info($result);
         $boardStr = $game->print();
         $this->info("Print Board: \n" . $boardStr);
 
