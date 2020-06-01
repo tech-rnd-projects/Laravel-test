@@ -115,6 +115,7 @@ class Board implements IBoard
     // keep track of the previouse last matched index so it will be consecutive.
     $previouseRowIndex = -1;
     $previouseCollIndex = -1;
+    $pStartIndex = -1; // keep track which symbol in payline started the consecutive search
     for ($pIndex; $pIndex < $paylineSum; $pIndex++) {
       if ($foundMatch) {
         // searching ne
@@ -149,6 +150,9 @@ class Board implements IBoard
                 $foundMatch = true;
               }
               if ($foundMatch) {
+                if ($pStartIndex == -1) {
+                  $pStartIndex = $pIndex; // keep track of starting point for consecutive search
+                }
                 $previouseCollIndex = $colIndex;
                 $previouseRowIndex = $rowIndex;
                 array_push($foundSymbols, $cell);
@@ -161,11 +165,25 @@ class Board implements IBoard
               } else {
                 $previouseCollIndex = -1;
                 $previouseRowIndex = -1;
+                $countSymbols = count($foundSymbols);
                 // if found < 3 then reset foundSymbols to empty.
-                if (count($foundSymbols) < $minMatch) {
+                if ($countSymbols < $minMatch) {
                   Log::debug("[clear] cellVal: " . $cellVal);
                   // clear, dont bother if its less then minMatch
                   $foundSymbols = [];
+                }
+                // it is not last payline symbol check?
+                if ($countSymbols > 0 && $pIndex < $paylineSum - 1) {
+                  // if ($countSymbols >= $minMatch) skip payline symbols by countSymbols,
+                  // else go back to where consecutive search started + 1 for next symbol in payline
+                  // $nextPIndex = $countSymbols < $minMatch ? ($pStartIndex + 1) : $pStartIndex + $countSymbols;
+                  $nextPIndex = ($pStartIndex + 1);
+                  Log::info("[revert] pIndex: " . $pIndex . " revert-pIndex:" . $nextPIndex);
+                  // step back/revert and reset symbol loop to countSymbols + 1 as 'next' symbol
+                  $pIndex = $nextPIndex;
+                  $pStartIndex = -1;
+                  Log::info("[revert] colIndex: " . $colIndex . " revert-colIndex:" . (($colIndex - $countSymbols) + 1));
+                  $colIndex = ($colIndex - $countSymbols) + 1; // start searching new consecutive search
                 }
               }
 
