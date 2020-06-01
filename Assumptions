@@ -2,10 +2,10 @@
 A payline might have multiple matches from different rows, this case is not catered for.
 for now just take the biggest match.
 
-2. booard row - payline matches:
+2. booard row - payline matches: (fixed)
 if the board row has 'r 1 r k h' and the payline is 'r k h 1 2', 'r' first match is column 1 so its a logical bug.
 improvement: second 'r' in row should also be considered. to fix, when cell is not matched, move backwards the number of symbols matchesd + 1. 
-Note this is on a single row not like poiint 1 whuich is multiple matches in multiple rows.
+Note this is on a single row not like point 1 whuich is multiple matches in multiple rows.
 
 3. No max paylines:
 a bet might have x amount of paylines, but its always 1 euro. the more paylines, the more winnings :) lol.

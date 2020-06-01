@@ -37,6 +37,7 @@ class SlotStaticCommand extends Command {
         $game = new Board($boardConfig);
         $paylines = [
             "8 5 8 11 10", // <-- bug, notice the duplicate '8', should match '5 8 11' but first 8 was skipped
+            "0 3 0 3 6",
             "9 5 8 11 10",
             "0 3 6 9 12",
             "2 5 8 2 2",
